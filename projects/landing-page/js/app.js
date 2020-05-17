@@ -17,7 +17,8 @@
  * Define Global Variables
  * 
 */
-
+const elNavbar = document.querySelector("#navbar__list");
+const navActiveClass = "nav-active";
 
 /**
  * End Global Variables
@@ -25,7 +26,26 @@
  * 
 */
 
+function buildNav() {
+    // find all sections
+    const sections = document.querySelectorAll("section");
+    const navFragment = document.createDocumentFragment();
+    sections.forEach(function(section){
+        // create li for each section
+        const li = document.createElement("li");
+        const sectionTitle = section.querySelector("h2").textContent;
+        li.textContent = sectionTitle;
+        navFragment.appendChild(li);
+    });
+    // append the fragment containing all section titles
+    elNavbar.appendChild(navFragment);
+}
 
+function setupActiveDetection(){
+}
+
+function setupScrolling(){
+}
 
 /**
  * End Helper Functions
@@ -33,13 +53,16 @@
  * 
 */
 
-// build the nav
+new function(){
+    // build the nav
+    buildNav();
 
+    // Add class 'active' to section when near top of viewport
+    setupActiveDetection();
 
-// Add class 'active' to section when near top of viewport
-
-
-// Scroll to anchor ID using scrollTO event
+    // Scroll to anchor ID using scrollTO event
+    setupScrolling();
+}();
 
 
 /**
