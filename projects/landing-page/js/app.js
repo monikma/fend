@@ -34,6 +34,7 @@ function buildNav() {
         // create li for each section
         const li = document.createElement("li");
         const sectionTitle = section.querySelector("h2").textContent;
+        li.setAttribute("data-nav", section.getAttribute("data-nav"));
         li.textContent = sectionTitle;
         navFragment.appendChild(li);
     });
@@ -45,6 +46,14 @@ function setupActiveDetection(){
 }
 
 function setupScrolling(){
+    elNavbar.addEventListener("click", function(event){
+        const target = event.target;
+        if (target.nodeName === 'LI') {  // ← verifies target is desired element
+            const dataNav = target.getAttribute("data-nav");
+            const clickedSection = document.querySelector("section[data-nav='"+dataNav+"']");
+            clickedSection.scrollIntoView();
+        }
+    })
 }
 
 /**
