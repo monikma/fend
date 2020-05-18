@@ -1,7 +1,7 @@
 // Personal API Key for OpenWeatherMap API
 const apiKey = '&appid=a8e0f9e6690428bc6ff0a514cb07c017';
 const weatherURL = 'http://api.openweathermap.org/data/2.5/weather?zip=';
-const baseURL = 'http://localhost:8000';
+const baseURL = 'http://localhost:8000/projectData';
 
 // Event listener to add function to existing HTML DOM element
 function performAction(event) {
@@ -27,7 +27,6 @@ document.getElementById('generate').addEventListener('click', performAction);
 /* Function to GET Web API Data*/
 const getTemp = async (url, zip, key) => {
     const response = await fetch(url + zip + key);
-    console.log(response.status);
     try {
         if (response.status == 404) {
             error("The zip code could not be recognized, please enter a valid US zip code.")
@@ -45,23 +44,44 @@ const getTemp = async (url, zip, key) => {
 
 /* Function to POST data */
 const postData = async (url, data) => {
-    console.log(data);
+    const response = await fetch(url, {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        // Body data type must match "Content-Type" header
+        body: JSON.stringify(data),
+    });
+
+    try {
+        if (response.status != 201) {
+            internalError();
+        }
+    } catch (error) {
+        console.log("error", error);
+        internalError();
+    }
 }
 
 /* Function to GET Project Data */
 const getData = async (url) => {
     const response = await fetch(url);
-    if (response.status != 200) {
+    try {
+        if (response.status != 200) {
+            internalError();
+        } else {
+            const newData = await response.json();
+            return newData;
+        }
+    } catch (error) {
+        console.log("error", error);
         internalError();
-    } else {
-        const newData = await response.json();
-        return newData;
     }
 }
 
 /* Function to update UI*/
 const updateUi = async (data) => {
-    console.log(data);
     const entryHolder = document.getElementById("entryHolder");
     entryHolder.querySelector("#date").innerHTML = data.date;
     entryHolder.querySelector("#temp").innerHTML = data.weather;
