@@ -25,3 +25,8 @@ const port = 8000;
 const server = app.listen(port, ()=>{
     console.log(`running on localhost: ${port}`)
 })
+
+// respond with "hello world" when a GET request is made to the homepage
+app.get('/', function (req, res) {
+  res.send('hello world');
+})
