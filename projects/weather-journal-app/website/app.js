@@ -1,52 +1,62 @@
 // Personal API Key for OpenWeatherMap API
-const apiKey = "a8e0f9e6690428bc6ff0a514cb07c017";
-const weatherURL = 'http://api.animalinfo.org/data/?animal='
-const baseURL = 'http://api.animalinfo.org/data/?animal='
+const apiKey = '&appid=a8e0f9e6690428bc6ff0a514cb07c017';
+const weatherURL = 'http://api.openweathermap.org/data/2.5/weather?zip=';
+const baseURL = 'http://localhost:8000';
 
 // Event listener to add function to existing HTML DOM element
-
-/* Function called by event listener */
 function performAction(event) {
     const zip = document.getElementById('zip').value;
     const feelings = document.getElementById('feelings').value;
     if (zip && feelings) {
-        getWeather(weatherURL, zip, apiKey)
-            .then(weather => postData(baseURL, {
-                weather: weather,
+        getTemp(weatherURL, zip, apiKey)
+            .then(temp => postData(baseURL, {
+                weather: temp,
                 feelings: feelings,
                 date: getCurrentDate()
             }))
             .then(() => getData(baseURL))
             .then(data => updateUi(data));
     } else {
-        alert("You need to provide both your Zipcode and how you are feeling.");
+        alert("You need to provide both your Zip code and how you are feeling.");
     }
 }
 
-/* Function to GET Web API Data*/
+/* Function called by event listener */
 document.getElementById('generate').addEventListener('click', performAction);
 
-const getWeather = async (baseURL, zip, key) => {
-    //const res = await fetch(baseURL+zip+key)
+/* Function to GET Web API Data*/
+const getTemp = async (url, zip, key) => {
+    const response = await fetch(url + zip + key);
+    console.log(response.status);
     try {
-        //const data = await res.json();
-        //console.log(data)
-        //return data;
-        return "Sunny";
+        if (response.status == 404) {
+            error("The zip code could not be recognized, please enter a valid US zip code.")
+        } else if (response.status != 200) {
+            internalError();
+        } else {
+            const newData = await response.json();
+            return newData.main.temp;
+        }
     } catch (error) {
         console.log("error", error);
-        // appropriately handle the error
+        internalError();
     }
 }
 
 /* Function to POST data */
-const postData = async (baseURL, data) => {
+const postData = async (url, data) => {
     console.log(data);
 }
 
 /* Function to GET Project Data */
-const getData = async (baseURL) => {
-    return {date:"rwerr", weather:"SUnny !", feelings: "Alles vorbei"};
+const getData = async (url) => {
+    const response = await fetch(url);
+    if (response.status != 200) {
+        internalError();
+    } else {
+        const newData = await response.json();
+        return newData;
+    }
 }
 
 /* Function to update UI*/
@@ -64,4 +74,13 @@ const updateUi = async (data) => {
 function getCurrentDate() {
     let d = new Date();
     return (d.getMonth() + 1) + '.' + d.getDate() + '.' + d.getFullYear();
+}
+
+// Print error
+function internalError() {
+    error("Sorry there was a problem completing your request, please try later.");
+}
+
+function error(msg) {
+    alert(msg);
 }
