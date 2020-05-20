@@ -7,9 +7,13 @@ const api = new aylien({
 })
 
 function textapi(text, callback) {
+    console.log("textapi.js: Calling textapi with text: " + text)
     api.sentiment({
       'text': text
-    }, callback)
+    }, function(error, response){
+        console.log("textapi.js: Got response: " + JSON.stringify(response))
+        callback(error, response)
+    })
 }
 
 module.exports = textapi

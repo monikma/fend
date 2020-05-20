@@ -32,7 +32,19 @@ app.get('/test', function (req, res) {
 })
 
 app.get('/analyze', function (req, res) {
-    //const response = textapi(req.param)
-    res.send(response)
+    const { text } = req.query
+    const response = textapi(text, function(error, response){
+        const json = {
+            'title': 'Semantic analysis result',
+            'message': `The text "${text}" is ${response.subjectivity} and ${response.polarity}.`,
+            'time': getCurrentDate()
+        }
+
+        res.send(json)
+    })
 })
 
+function getCurrentDate() {
+    let d = new Date();
+    return (d.getMonth() + 1) + '.' + d.getDate() + '.' + d.getFullYear();
+}
