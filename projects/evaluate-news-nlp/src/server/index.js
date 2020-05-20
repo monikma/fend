@@ -33,13 +33,8 @@ app.get('/test', function (req, res) {
 
 app.get('/analyze', function (req, res) {
     const { text } = req.query
-    const response = textapi(text, function(error, response){
-        const json = {
-            'title': 'Semantic analysis result',
-            'message': `The text "${text}" is ${response.subjectivity} and ${response.polarity}.`,
-            'time': getCurrentDate()
-        }
-
+    const response = textapi(decodeURIComponent(text), function(error, response){
+        const json = convertServerResponse(text, response)
         res.send(json)
     })
 })
@@ -48,3 +43,13 @@ function getCurrentDate() {
     let d = new Date();
     return (d.getMonth() + 1) + '.' + d.getDate() + '.' + d.getFullYear();
 }
+
+function convertServerResponse(text, response){
+    return {
+        'title': 'Semantic analysis result',
+        'message': `The text "${text}" is ${response.subjectivity} and ${response.polarity}.`,
+        'time': getCurrentDate()
+    }
+}
+
+module.exports = { convertServerResponse }

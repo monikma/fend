@@ -1,12 +1,7 @@
-const textapi = require("./textapi")
+const index = require('./index');
 
-test('basic call to textapi should work', done => {
-    try {
-        textapi('John is a very good football player!', function(error, response){
-            expect(response.polarity).toBe("positive")
-            done()
-        })
-    } catch (error) {
-        done(error)
-    }
-});
+test('the server response should be converted correctly', () => {
+  expect(index.convertServerResponse("text", {"polarity": "good", "subjectivity": "stupid"}).message).toBe(
+      "The text \"text\" is stupid and good."
+  )
+})
