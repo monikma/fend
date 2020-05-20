@@ -7,3 +7,8 @@ import './styles/header.scss'
 import './styles/resets.scss'
 
 console.log("Built with Webpack");
+
+export {
+    checkForName,
+    handleSubmit
+}
