@@ -1,9 +1,12 @@
 const aylien = require("aylien_textapi")
 const util = require('util')
+const dotenv = require('dotenv');
+
+dotenv.config();
 
 const api = new aylien({
-    application_id: "15442cc4",//process.env.AYLIEN_API_ID,
-    application_key: "d71c08eb51cefffc2e5a8be2159977d3"//process.env.AYLIEN_API_KEY
+    application_id: process.env.AYLIEN_API_ID,
+    application_key: process.env.AYLIEN_API_KEY
 })
 
 function textapi(text, callback) {
