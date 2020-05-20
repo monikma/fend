@@ -11,7 +11,11 @@ function textapi(text, callback) {
     api.sentiment({
       'text': text
     }, function(error, response){
-        console.log("textapi.js: Got response: " + JSON.stringify(response))
+        if (!error){
+            console.log("textapi.js: Got response: " + JSON.stringify(response))
+        }else{
+            console.log("textapi.js: Got error: " + JSON.stringify(error))
+        }
         callback(error, response)
     })
 }

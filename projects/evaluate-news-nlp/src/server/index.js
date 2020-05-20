@@ -28,9 +28,18 @@ app.get('/test', function (req, res) {
 
 app.get('/analyze', function (req, res) {
     const { text } = req.query
+    if (!text){
+        res.status(400).send()
+        return
+    }
     const response = textapi(decodeURIComponent(text), function(error, response){
-        const json = convertServerResponse(text, response)
-        res.send(json)
+        if(!error){
+            const json = convertServerResponse(text, response)
+            res.send(json)
+        }else{
+            console.log(error)
+            res.status(500).send()
+        }
     })
 })
 
