@@ -3,6 +3,12 @@ const aylien = require("aylien_textapi");
 const dotenv = require('dotenv');
 const express = require('express')
 const mockAPIResponse = require('./mockAPI.js')
+var cors = require('cors')
+
+var corsOptions = {
+  origin: 'http://localhost:8080',
+  optionsSuccessStatus: 200
+}
 
 const textapi = new aylien({
     application_id: process.env.AYLIEN_API_ID,
@@ -12,6 +18,7 @@ dotenv.config();
 const app = express()
 
 app.use(express.static('dist'))
+app.use(cors(corsOptions))
 
 console.log(__dirname)
 
