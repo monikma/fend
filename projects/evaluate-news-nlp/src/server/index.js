@@ -5,16 +5,11 @@ const express = require('express')
 const mockAPIResponse = require('./mockAPI.js')
 var cors = require('cors')
 
-var corsOptions = {
-  origin: 'http://localhost:8080',
-  optionsSuccessStatus: 200
-}
-
 dotenv.config();
 const app = express()
 
 app.use(express.static('dist'))
-app.use(cors(corsOptions))
+app.use(cors())
 
 console.log(__dirname)
 
