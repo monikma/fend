@@ -1,5 +1,5 @@
 const path = require('path')
-const aylien = require("aylien_textapi");
+const textapi = require("./textapi");
 const dotenv = require('dotenv');
 const express = require('express')
 const mockAPIResponse = require('./mockAPI.js')
@@ -10,10 +10,6 @@ var corsOptions = {
   optionsSuccessStatus: 200
 }
 
-const textapi = new aylien({
-    application_id: process.env.AYLIEN_API_ID,
-    application_key: process.env.AYLIEN_API_KEY
-});
 dotenv.config();
 const app = express()
 
@@ -34,3 +30,9 @@ app.listen(8081, function () {
 app.get('/test', function (req, res) {
     res.send(mockAPIResponse)
 })
+
+app.get('/analyze', function (req, res) {
+    //const response = textapi(req.param)
+    res.send(response)
+})
+
